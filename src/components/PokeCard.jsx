@@ -16,8 +16,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import defaultImg from "../assests/pokemon.jpg";
 import { Box, Paper } from "@mui/material";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import PropTypes from "prop-types";
+import Skeleton from "react-loading-skeleton";
 
 function Item(props) {
   const { sx, ...other } = props;
@@ -56,7 +57,7 @@ Item.propTypes = {
   ]),
 };
 
-const PokeCard = ({ myData }) => {
+const PokeCard = ({emptyData,  myData }) => {
   const { id, name, height, weight, type } = myData;
 
   const handleImgError = (event) => {
@@ -67,7 +68,7 @@ const PokeCard = ({ myData }) => {
     <>
       <div>
         <Card
-        className="pokecard"
+          className="pokecard"
           sx={{
             maxWidth: 290,
             justifyContent: "center",
@@ -79,29 +80,37 @@ const PokeCard = ({ myData }) => {
           }}
         >
           <Box
-          
             style={{
               display: "flex",
               alignItems: "flex-start",
               position: "relative",
             }}
           >
-            <img
-              // component="img"
-              // height="100"
-              // width="100"
-              src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${id}.svg`}
-              alt={`Pokemon_${name}`}
-              onError={handleImgError}
-              style={{
-                objectFit: "cover",
-                width: "auto",
-                height: "160px",
-                marginLeft: "auto",
-                marginRight: "auto",
-                padding: "7px 2px",
-              }}
-            />
+            {emptyData ? (
+              <>
+                <Skeleton width={300} height={200}  />
+              </>
+            ) : (
+              <>
+                <img
+                  // component="img"
+                  // height="100"
+                  // width="100"
+                  src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${id}.svg`}
+                  alt={`Pokemon_${name}`}
+                  onError={handleImgError}
+                  style={{
+                    objectFit: "cover",
+                    width: "auto",
+                    height: "160px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    padding: "7px 2px",
+                  }}
+                />
+              </>
+            )}
+
             <CardActions
               disableSpacing
               sx={{ position: "absolute", top: "0", right: "0" }}

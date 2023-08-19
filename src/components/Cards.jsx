@@ -7,7 +7,7 @@ import Card from './PokeCard';
 
 
 
-export default function Cards({pokeInfo}) {
+export default function Cards({ emptyData,pokeInfo}) {
    
     
 
@@ -16,7 +16,7 @@ export default function Cards({pokeInfo}) {
       <Grid container columns={{ xs: 4, sm: 8, md: 12 }}>
       {pokeInfo.map((curVal, index) => (
         <Grid item xs={4} sm={4} md={4} key={index}>
-            <Card myData={curVal} />
+            <Card emptyData={emptyData} myData={curVal} />
         </Grid>
       ))}
     </Grid>

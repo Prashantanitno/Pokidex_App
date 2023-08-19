@@ -1,22 +1,24 @@
 import { Box, Card, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Cards from "../components/Cards";
 import axios from "axios";
 import Loading from "../components/Loading";
 import "../index.scss";
 import { Input } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 
 const Home = () => {
   const [data, setData] = useState([]);
+  const [name, setName] = useState();
   const [page, setPage] = useState(1);
+  const [emptyData, SetEmptyData] = useState(true);
   const [loading, setLoading] = useState(true);
   const [url, setUrl] = useState();
   const [mainUrl, setMainUrl] = useState(
     `https://pokeapi.co/api/v2/pokemon?limit=20&offset=500`
   );
 
-  const handelInfiniteScroll = async () => {
+  const handelInfiniteScroll = useCallback(async () => {
     try {
       if (
         window.innerHeight + document.documentElement.scrollTop + 1 >=
@@ -33,7 +35,7 @@ const Home = () => {
     } catch (err) {
       console.log(err);
     }
-  };
+  });
 
   useEffect(() => {
     axios.get(mainUrl).then((res) => {
@@ -63,6 +65,7 @@ const Home = () => {
           // console.log(obj);d
 
           setData((prev) => [...prev, obj]);
+          SetEmptyData(false);
         });
       });
 
@@ -79,6 +82,10 @@ const Home = () => {
 
   // console.log("------------------------> ", data);
 
+  const handleInputChange = (event) => {
+    setData(event.target.value);
+  };
+
   return (
     <Box>
       <Box mt={3}>
@@ -86,25 +93,37 @@ const Home = () => {
           PokeDex Cards
         </Typography>
       </Box>
-      <Box>
-        <Box sx={{ backgroundColor: "white" , width:"15%" }}>
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: "white",
+            width: "15%",
+          }}
+        >
           <form>
             <Input
               placeholder="Enter your name"
+              value={name}
+              onChange={handleInputChange}
               fullWidth={false}
               color="primary"
               variant="outlined"
             />
           </form>
         </Box>
-          <SearchIcon/>
+        <div style={{ backgroundColor: "white" }}>
+          <SearchIcon />
+        </div>
       </Box>
-      <Cards pokeInfo={data} />
+      <Cards emptyData={emptyData} pokeInfo={data} />
       {loading && <Loading />}
     </Box>
   );
 };
 
 export default Home;
-
-
